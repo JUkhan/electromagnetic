@@ -1,17 +1,17 @@
 function createStore<T = any>(initialState: T) {
-  const listenerList = new Set<(item: any) => any>();
-  let state = initialState;
+  const listenerList = new Set<(item: any, action: any) => any>();
+  let state: any = initialState;
   const reducers = new Map<string, (state: any, action: any) => any>();
   const effectMap = new Map<string, any>();
+
+  function notifyAll(action?: any) {
+    listenerList.forEach((listener) => listener(state, action));
+  }
   const obj = {
-    setState(key: string, value: any) {
-      state = { ...state, [key]: value };
-      listenerList.forEach((listener) => listener(state));
-    },
     getState() {
       return state;
     },
-    subscribe(listener: (state: any) => any) {
+    subscribe(listener: (state: any) => any): () => any {
       listenerList.add(listener);
       return () => listenerList.delete(listener);
     },
@@ -20,16 +20,25 @@ function createStore<T = any>(initialState: T) {
         action();
         return;
       }
+      let stateChanged = false;
       reducers.forEach((reduce, key) => {
-        /*@ts-ignore*/
-        const keyState = reduce(state[key], action);
-        this.setState(key, keyState);
+        const oldState = state[key];
+        const newState = reduce(oldState, action);
+        if (newState !== oldState) {
+          state[key] = newState;
+          stateChanged = true;
+        }
       });
-      effectMap.forEach((cal) => cal(this.dispatch, this.getState, action));
+      if (stateChanged) {
+        state = Object.assign({}, state);
+        notifyAll(action);
+      }
+      effectMap.forEach((cal) => cal(obj.dispatch, obj.getState, action));
     },
     addReducer(name: string, reducer: any, init: any) {
       reducers.set(name, reducer);
-      this.setState(name, init);
+      state = { ...state, [name]: init };
+      notifyAll();
     },
     effectMap,
   };

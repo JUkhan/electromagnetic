@@ -1,10 +1,20 @@
-import { useStore } from './selector';
+import { useEmEffect } from './hooks/useEmEffect';
+import { useSelector } from './hooks/useSelector';
+import { useSelectorByActions } from './hooks/useSelectorByActions';
 import { createReducer } from './createReducer';
 export * from './typeHelper';
-import { useEmEffect, createEffect, on } from './effect';
+import { createEffect, on } from './effect';
 import { createAction } from './createAction';
 
-export { useStore, createReducer, useEmEffect, createAction, createEffect, on };
+export {
+  useSelector,
+  useSelectorByActions,
+  createReducer,
+  useEmEffect,
+  createAction,
+  createEffect,
+  on,
+};
 export type Data<T> = {
   loading?: boolean;
   data?: T;
