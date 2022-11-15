@@ -1,3 +1,5 @@
+import { AnyAction } from './typeHelper';
+
 function createStore<T = any>(initialState: T) {
   const listenerList = new Set<(item: any, action: any) => any>();
   let state: any = initialState;
@@ -45,3 +47,10 @@ function createStore<T = any>(initialState: T) {
   return obj;
 }
 export const store = createStore({});
+export function addReducer<T>(
+  name: string,
+  reducer: (state: T, action: AnyAction) => T,
+  initialState: T
+) {
+  store.addReducer(name, reducer, initialState);
+}

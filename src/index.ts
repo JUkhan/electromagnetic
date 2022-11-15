@@ -5,8 +5,10 @@ import { createReducer } from './createReducer';
 export * from './typeHelper';
 import { createEffect, on } from './effect';
 import { createAction } from './createAction';
+import { addReducer } from './store';
 
 export {
+  addReducer,
   useSelector,
   useSelectorByActions,
   createReducer,

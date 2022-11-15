@@ -99,7 +99,7 @@ export interface Slice<
 > {
   name: Name;
   actions: ReducerActions<R> & EffectActions<M>;
-  //reducer: Reducer<State, AnyAction>;
+  reducer: Reducer<State, AnyAction>;
 }
 
 export type EffectHandler<A extends Action = AnyAction> = (

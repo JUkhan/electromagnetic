@@ -91,6 +91,6 @@ export function createReducer<
   return {
     name: options.name,
     actions,
-    //reducer,
+    reducer,
   };
 }
